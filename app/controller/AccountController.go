@@ -10,9 +10,9 @@ import (
 // @Summary 用户登陆接口
 // @Produce json
 // @Description 前台用户登陆接口
-// @Param data body account_entity.LoginData true "data"
+// @Param data body entity.LoginData true "data"
 // @Success 200 {object} message.Response
-// @router /api/system/account/login [post]
+// @router /api/account/login [post]
 func Login(c *gin.Context) {
 	var dto entity.LoginData
 	_ = c.BindJSON(&dto)
@@ -23,9 +23,9 @@ func Login(c *gin.Context) {
 // @Summary 用户注册接口
 // @Produce json
 // @Description 前台用户注册接口
-// @Param data body account_entity.RegData true "data"
+// @Param data body entity.RegData true "data"
 // @Success 200 {object} message.Response
-// @router /api/system/account/reg [post]
+// @router /api/account/reg [post]
 func Reg(c *gin.Context) {
 	var dto entity.RegData
 	_ = c.BindJSON(&dto)
@@ -38,7 +38,7 @@ func Reg(c *gin.Context) {
 // @Description 后台获取登录用户信息
 // @Security ApiKeyAuth
 // @Success 200 {object} message.Response
-// @router /api/system/account/getDetail [get]
+// @router /api/account/getDetail [get]
 func GetAccountDetail(c *gin.Context) {
 	service.AccountService().GetDetail(c)
 }
@@ -47,9 +47,9 @@ func GetAccountDetail(c *gin.Context) {
 // @Summary 发送用户注册验证码
 // @Produce json
 // @Description 前台用户注册发送验证码接口
-// @Param data body account_entity.SendCaptcha true "data"
+// @Param data body entity.SendCaptcha true "data"
 // @Success 200 {object} message.Response
-// @router /api/system/account/sendCaptcha [post]
+// @router /api/account/sendCaptcha [post]
 func SendCaptcha(c *gin.Context) {
 	var dto entity.SendCaptcha
 	_ = c.BindJSON(&dto)

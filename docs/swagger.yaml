@@ -1,0 +1,126 @@
+definitions:
+  entity.LoginData:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  entity.RegData:
+    properties:
+      avatar:
+        type: string
+      code:
+        type: integer
+      email:
+        type: string
+      mobile:
+        type: integer
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - code
+    - email
+    - mobile
+    - password
+    - username
+    type: object
+  entity.SendCaptcha:
+    properties:
+      mobile:
+        type: integer
+    required:
+    - mobile
+    type: object
+  message.Response:
+    properties:
+      code:
+        type: integer
+      data: {}
+      message:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: 后台管理系统api接口文档
+  title: easyAdmin后台管理系统
+  version: "1.0"
+paths:
+  /api/account/getDetail:
+    get:
+      description: 后台获取登录用户信息
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/message.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取登录用户信息
+  /api/account/login:
+    post:
+      description: 前台用户登陆接口
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entity.LoginData'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/message.Response'
+      summary: 用户登陆接口
+  /api/account/reg:
+    post:
+      description: 前台用户注册接口
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entity.RegData'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/message.Response'
+      summary: 用户注册接口
+  /api/account/sendCaptcha:
+    post:
+      description: 前台用户注册发送验证码接口
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entity.SendCaptcha'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/message.Response'
+      summary: 发送用户注册验证码
+securityDefinitions:
+  ApikeyAuth:
+    in: header
+    name: jason
+    type: apiKey
+swagger: "2.0"
