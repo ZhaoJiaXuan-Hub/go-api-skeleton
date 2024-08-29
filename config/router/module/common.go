@@ -2,7 +2,6 @@ package routerModule
 
 import (
 	"easy-go-admin/app/controller"
-	controllerSystem "easy-go-admin/app/controller/system"
 	"easy-go-admin/app/middleware"
 	"github.com/gin-gonic/gin"
 )
@@ -13,14 +12,13 @@ func SetupCommonRouter(base *gin.RouterGroup) {
 	index.GET("/index", controller.Index)
 
 	api := base.Group("/api")
-	system := api.Group("/system")
 
-	systemAccount := system.Group("/account")
-	systemAccount.POST("/login", controllerSystem.Login)
+	account := api.Group("/account")
+	account.POST("/login", controller.Login)
 	// 鉴权中间件
-	systemAccount.Use(middleware.AuthMiddleware())
+	account.Use(middleware.AuthMiddleware())
 	{
-		systemAccount.POST("/create", controllerSystem.CreateAccount)
-		systemAccount.GET("/getDetail", controllerSystem.GetAccountDetail)
+		account.POST("/create", controller.Reg)
+		account.GET("/getDetail", controller.GetAccountDetail)
 	}
 }

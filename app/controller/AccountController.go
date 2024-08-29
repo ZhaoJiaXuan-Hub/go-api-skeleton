@@ -1,4 +1,4 @@
-package controllerSystem
+package controller
 
 import (
 	"easy-go-admin/app/entity"
@@ -14,7 +14,7 @@ import (
 // @Success 200 {object} message.Response
 // @router /api/system/account/login [post]
 func Login(c *gin.Context) {
-	var dto account_entity.LoginData
+	var dto entity.LoginData
 	_ = c.BindJSON(&dto)
 	service.AccountService().Login(c, dto)
 }
@@ -27,7 +27,7 @@ func Login(c *gin.Context) {
 // @Success 200 {object} message.Response
 // @router /api/system/account/reg [post]
 func Reg(c *gin.Context) {
-	var dto account_entity.RegData
+	var dto entity.RegData
 	_ = c.BindJSON(&dto)
 	service.AccountService().Reg(c, dto)
 }
@@ -43,8 +43,15 @@ func GetAccountDetail(c *gin.Context) {
 	service.AccountService().GetDetail(c)
 }
 
+// SendCaptcha 发送验证码
+// @Summary 发送用户注册验证码
+// @Produce json
+// @Description 前台用户注册发送验证码接口
+// @Param data body account_entity.SendCaptcha true "data"
+// @Success 200 {object} message.Response
+// @router /api/system/account/sendCaptcha [post]
 func SendCaptcha(c *gin.Context) {
-	var dto account_entity.SendCaptcha
+	var dto entity.SendCaptcha
 	_ = c.BindJSON(&dto)
 	service.AccountService().SendCaptcha(c, dto)
 }

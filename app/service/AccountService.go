@@ -12,10 +12,10 @@ import (
 
 // IAccountService 定义接口
 type IAccountService interface {
-	Login(c *gin.Context, dto account_entity.LoginData)
-	Reg(c *gin.Context, dto account_entity.RegData)
+	Login(c *gin.Context, dto entity.LoginData)
+	Reg(c *gin.Context, dto entity.RegData)
 	GetDetail(c *gin.Context)
-	SendCaptcha(c *gin.Context, dto account_entity.SendCaptcha)
+	SendCaptcha(c *gin.Context, dto entity.SendCaptcha)
 }
 
 type accountServiceImpl struct{}
@@ -25,13 +25,13 @@ func AccountService() IAccountService {
 }
 
 // SendCaptcha 发送验证码
-func (s *accountServiceImpl) SendCaptcha(c *gin.Context, dto account_entity.SendCaptcha) {
+func (s *accountServiceImpl) SendCaptcha(c *gin.Context, dto entity.SendCaptcha) {
 	//TODO implement me
 	panic("implement me")
 }
 
 // Login 用户登陆
-func (s *accountServiceImpl) Login(c *gin.Context, dto account_entity.LoginData) {
+func (s *accountServiceImpl) Login(c *gin.Context, dto entity.LoginData) {
 	// 登陆参数验证
 	err := Validate.New().Struct(dto)
 	if err != nil {
@@ -39,7 +39,7 @@ func (s *accountServiceImpl) Login(c *gin.Context, dto account_entity.LoginData)
 		return
 	}
 	// 验证用户信息
-	Account, err := account_dao.AccountDetailByUsername(dto.UserName)
+	Account, err := dao.AccountDetailByUsername(dto.UserName)
 	if err != nil || Account.ID == 0 {
 		message.Fail(c, int(message.Code.NOTFOUND), "用户名不存在")
 		return
@@ -60,14 +60,14 @@ func (s *accountServiceImpl) Login(c *gin.Context, dto account_entity.LoginData)
 }
 
 // Reg 注册用户
-func (s *accountServiceImpl) Reg(c *gin.Context, dto account_entity.RegData) {
+func (s *accountServiceImpl) Reg(c *gin.Context, dto entity.RegData) {
 	// 创建参数验证
 	err := Validate.New().Struct(dto)
 	if err != nil {
 		message.Fail(c, int(message.Code.BADREQUEST), message.Code.GetMessage(message.Code.BADREQUEST))
 		return
 	}
-	Account, err := account_dao.AccountDetailByUsername(dto.UserName)
+	Account, err := dao.AccountDetailByUsername(dto.UserName)
 	if err == nil && Account.ID != 0 {
 		message.Fail(c, int(message.Code.BADREQUEST), "用户名已被占用")
 		return
@@ -84,7 +84,7 @@ func (s *accountServiceImpl) Reg(c *gin.Context, dto account_entity.RegData) {
 		message.Fail(c, int(message.Code.BADREQUEST), "验证码不正确")
 		return
 	}
-	createData := account_entity.Account{
+	createData := entity.Account{
 		UserName: dto.UserName,
 		Password: pass,
 		Salt:     salt,
@@ -92,7 +92,7 @@ func (s *accountServiceImpl) Reg(c *gin.Context, dto account_entity.RegData) {
 		Avatar:   avatar,
 		Mobile:   dto.Mobile,
 	}
-	err = account_dao.AccountCreate(createData)
+	err = dao.AccountCreate(createData)
 	if err != nil {
 		message.Fail(c, int(message.Code.CREATERESOURCEFAILED), "创建用户失败")
 		return

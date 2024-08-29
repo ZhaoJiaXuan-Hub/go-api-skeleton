@@ -11,7 +11,7 @@ import (
 )
 
 type userStdClaims struct {
-	account_entity.JwtAccountData
+	entity.JwtAccountData
 	jwt.StandardClaims
 }
 
@@ -29,8 +29,8 @@ var (
 )
 
 // GenerateTokenByAdmin 生成用户token
-func GenerateTokenByAdmin(account account_entity.Account) (string, error) {
-	var jwtAdmin = account_entity.JwtAccountData{
+func GenerateTokenByAdmin(account entity.Account) (string, error) {
+	var jwtAdmin = entity.JwtAccountData{
 		Id:       account.ID,
 		UserName: account.UserName,
 		Mobile:   account.Mobile,
@@ -49,7 +49,7 @@ func GenerateTokenByAdmin(account account_entity.Account) (string, error) {
 }
 
 // ValidateToken 解析token
-func ValidateToken(tokenString string) (*account_entity.JwtAccountData, error) {
+func ValidateToken(tokenString string) (*entity.JwtAccountData, error) {
 	if len(tokenString) == 0 {
 		return nil, errors.New(ErrAbsent)
 	}
@@ -85,7 +85,7 @@ func GetAccountID(c *gin.Context) (uint, error) {
 	if !exist {
 		return 0, errors.New("未找到id")
 	}
-	admin, ok := u.(account_entity.Account)
+	admin, ok := u.(entity.Account)
 	if !ok {
 		return admin.ID, nil
 	}
@@ -93,14 +93,14 @@ func GetAccountID(c *gin.Context) (uint, error) {
 }
 
 // GetAccountInfo 返回用户信息
-func GetAccountInfo(c *gin.Context) (*account_entity.JwtAccountData, error) {
+func GetAccountInfo(c *gin.Context) (*entity.JwtAccountData, error) {
 	u, exist := c.Get(constant.ContextKeyUserObj)
 	if !exist {
 		return nil, errors.New("未找到用户")
 	}
 
 	// 确保从上下文中获取的数据类型是 *account_entity.JwtAccountData
-	admin, ok := u.(*account_entity.JwtAccountData)
+	admin, ok := u.(*entity.JwtAccountData)
 	if !ok {
 		return nil, errors.New("类型错误：未找到正确的用户对象")
 	}

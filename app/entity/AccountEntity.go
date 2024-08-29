@@ -1,4 +1,4 @@
-package account_entity
+package entity
 
 import (
 	"easy-go-admin/config/util"

@@ -35,7 +35,7 @@ func AuthMiddleware() func(c *gin.Context) {
 			return
 		}
 		// 根据用户 ID 查询用户
-		user, err := account_dao.AccountDetailById(userData.Id)
+		user, err := dao.AccountDetailById(userData.Id)
 		if err != nil {
 			fmt.Println(err.Error())
 			message.Fail(c, int(message.Code.NOTFOUND), "登录用户已经不存在")
@@ -48,7 +48,7 @@ func AuthMiddleware() func(c *gin.Context) {
 			c.Abort()
 			return
 		}
-		userObj := account_entity.JwtAccountData{
+		userObj := entity.JwtAccountData{
 			UserName: user.UserName,
 			Avatar:   user.Avatar,
 			Email:    user.Email,
