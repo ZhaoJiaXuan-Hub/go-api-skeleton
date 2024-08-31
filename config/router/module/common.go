@@ -15,10 +15,10 @@ func SetupCommonRouter(base *gin.RouterGroup) {
 
 	account := api.Group("/account")
 	account.POST("/login", controller.Login)
+	account.POST("/reg", controller.Reg)
 	// 鉴权中间件
 	account.Use(middleware.AuthMiddleware())
 	{
-		account.POST("/create", controller.Reg)
 		account.GET("/getDetail", controller.GetAccountDetail)
 	}
 }

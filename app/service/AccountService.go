@@ -74,14 +74,8 @@ func (s *accountServiceImpl) Reg(c *gin.Context, dto entity.RegData) {
 	}
 	salt := util.GenerateRandomString(15)
 	pass := util.EncryptionPassword(dto.Password, salt)
-	var avatar string
-	if dto.Avatar != nil {
-		avatar = *dto.Avatar
-	} else {
-		avatar = ""
-	}
-	if dto.Code != 6666 {
-		message.Fail(c, int(message.Code.BADREQUEST), "验证码不正确")
+	if dto.Captcha != "6666" {
+		message.Fail(c, int(message.Code.BADREQUEST), "手机验证码不正确")
 		return
 	}
 	createData := entity.Account{
@@ -89,12 +83,11 @@ func (s *accountServiceImpl) Reg(c *gin.Context, dto entity.RegData) {
 		Password: pass,
 		Salt:     salt,
 		Email:    dto.Email,
-		Avatar:   avatar,
 		Mobile:   dto.Mobile,
 	}
 	err = dao.AccountCreate(createData)
 	if err != nil {
-		message.Fail(c, int(message.Code.CREATERESOURCEFAILED), "创建用户失败")
+		message.Fail(c, int(message.Code.CREATERESOURCEFAILED), err.Error())
 		return
 	}
 	message.Success(c, nil)

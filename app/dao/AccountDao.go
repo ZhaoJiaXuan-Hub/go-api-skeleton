@@ -17,7 +17,7 @@ func AccountDetailByUsername(username string) (systemAccount entity.Account, err
 
 // AccountDetailById 通过ID获取用户详细
 func AccountDetailById(id uint) (account entity.Account, err error) {
-	if err := database.Db.Preload("Roles.Menus.RolesInfo").Preload("Dept").Where("id = ?", id).First(&account).Error; err != nil {
+	if err := database.Db.Where("id = ?", id).First(&account).Error; err != nil {
 		return account, err // 或者根据具体情况返回错误或默认值
 	}
 	// 检查并设置默认头像
